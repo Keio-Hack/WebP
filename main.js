@@ -157,7 +157,7 @@
  		var url = "http://syrinx.q.t.u-tokyo.ac.jp/tori/java/css/java.css";
  		$.get(url, function(data){
  			var pageCssSource = data.responseText;
- 			// console.log(pageCssSource);
+ 			 console.log(pageCssSource);
  		})
  	})
  });
