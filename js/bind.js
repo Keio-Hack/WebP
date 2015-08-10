@@ -1,9 +1,9 @@
-//
-// $("#button").on("click", bind_html);
-//
-//
-//
-//
-//
-//
-// $("#getCssButton").on("click", bind_css);
+
+$("#button").on("click", get_html);
+
+
+
+
+
+
+$("#getCssButton").on("click", bind_css);

@@ -26,7 +26,7 @@
 //   // console.log(array);
 //   return array;
 // }
-//
+// 
 // //この関数はhtml文書の文字列を第一引数として受け取り、抜き出したいタグの名前を第二引数として受け取る。
 // //戻り値としてはそのタグの中身の文字列（そのタグの開始タグと閉じタグを含む）を返す。
 // function findTagAndReturnTagstring(htmlString, tagName){
@@ -55,7 +55,7 @@
 //
 //
 //
-// //以下２つ、開始タグが省略できるタグのための関数。動きは上２つと同じ。
+// //以下２つ、開始タグが省略できるタグのための関数。動きは下２つと同じ。
 // function devideStringByTagname_SingleTagVer(arr, tagName){
 //   var array = arr.slice(0);
 //   var testarr = [];

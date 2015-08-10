@@ -31,7 +31,7 @@
 
       concat: {
         dist: {
-          src: ['./js/get_source.js', './js/bind.js' ],
+          src: ['./js/api.js', './js/bind.js' ],
           dest: './js/app.js',
         }
       }
