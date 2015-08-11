@@ -1,0 +1,35 @@
+{
+  "name": "webp",
+  "version": "1.0.0",
+  "description": "The API to parse html to easier html",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Keio-Hack/WebP.git"
+  },
+  "keywords": [
+    "Keio-Hack",
+    "WebP"
+  ],
+  "author": "take.sei",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Keio-Hack/WebP/issues"
+  },
+  "homepage": "https://github.com/Keio-Hack/WebP#readme",
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-concat": "^0.5.1",
+    "grunt-contrib-connect": "^0.11.2",
+    "grunt-contrib-jshint": "^0.11.2",
+    "grunt-contrib-requirejs": "^0.4.4",
+    "grunt-contrib-uglify": "^0.9.1",
+    "grunt-contrib-watch": "^0.6.1",
+    "jasmine": "^2.3.2",
+    "jquery": "^2.1.4",
+    "underscore": "^1.8.3"
+  }
+}

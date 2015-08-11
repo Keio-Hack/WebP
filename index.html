@@ -3,19 +3,24 @@
 <head>
 	<meta charset="UTF-8">
 	<title>TestPage</title>
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-	<script src="underscore-min.js"></script>
-	<script src="xdomainajax.js"></script>
-	<script src="main.js"></script>
-
+	<script src="./node_modules/jquery/dist/jquery.min.js"></script>
+	<script src="./node_modules/underscore/underscore-min.js"></script>
+	<script src="./assets/xdomainajax.js"></script>
 </head>
+
 <body>
-	<a href="main.js">honya</a>
-	<input type="text" name="" value="" id="text">
-	<input type="button" name="" value="html取得ボタン" id="button">
-	<input type="button" name="" value="css取得ボタン" id="getCssButton">
+	<input type="text" name="" value="" id="text"></input>
+	<input type="button" name="" value="html取得ボタン" id="button"></input>
+	<input type="button" name="" value="css取得ボタン" id="getCssButton"></input>
 	<div>
-		<p>テストページ</p>
+		<p>確認方法</p>
+		<ol>
+			<li>各ボタンを押す</li>
+			<li>consoleに対して"api_global"と打つ</li>
+			<li>api_globalにhtmlとfile_linkプロパティがあるかを確認</li>
+		</ol>
 	</div>
+
+	<script src="./js/app.js"></script>
 </body>
 </html>
