@@ -26,7 +26,7 @@
 //   // console.log(array);
 //   return array;
 // }
-// 
+//
 // //この関数はhtml文書の文字列を第一引数として受け取り、抜き出したいタグの名前を第二引数として受け取る。
 // //戻り値としてはそのタグの中身の文字列（そのタグの開始タグと閉じタグを含む）を返す。
 // function findTagAndReturnTagstring(htmlString, tagName){

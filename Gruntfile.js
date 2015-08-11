@@ -4,7 +4,7 @@
       pkg: grunt.file.readJSON('package.json'),
 
       jshint: {
-        files: ["js/*.js"],
+        files: ["js/app.js"],
         options: {
           jshintrc: ".jshintrc",
           force: true
@@ -25,7 +25,7 @@
       watch: {
         javascript: {
           files: ['js/*.js', "!js/app.js"],
-          tasks: ['jshint', "concat"],
+          tasks: ['concat', "jshint"],
         }
       },
 

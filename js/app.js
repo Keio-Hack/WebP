@@ -1,13 +1,11 @@
 "use strict";
 
-
-
 // -------------- これより下、関数型プログラムであったほうが楽な関数s なんで、無視しておｋ
 
 // valの存在確認プレディゲート と valがtrueを返すリテラルかを確認するプレディゲート
 function existy (val) { return val != null}　
-function truthy (val) { return (val !== false) && existy(val)}
-
+function truthy (val) { return (val !== false) && existy(val)} //valがtrueなやつかどうか確認プレディゲート
+function fail   (msg) { throw new Error(msg)} //エラーを吐く
 
 function always(VALUE) { //valueを常に返すクロージャ
   return function() {
@@ -18,6 +16,7 @@ function always(VALUE) { //valueを常に返すクロージャ
 function doWhen (cond, func) { //ifをカプセル化したやつ
   if (truthy(cond))
   return func();
+
   else
   return undefined;
 }
@@ -38,32 +37,36 @@ function ajax_getter (TYPE){
 }
 
 
+//指定したtargetとkeywords(ary)をpred(pred_function)を元にtrue,falseを返すpredicate関数
+function whatever_here(pred){
+  return function closure (target, keywords){
+    if (_.isEmpty(keywords)){
+      return false;
+    }
+    else{
+      var searcher = keywords[0];
+      if (pred(target,searcher))
+      return true
+      else
+      return closure(target, _.rest(keywords));
 
-//指定したtargetと一致する配列keywordsがあればtrue、以外はfalse
-
-function same_here (target, keywords){
-  if (_.isEmpty(keywords))
-  return undefined;
-
-  else{
-    if (keywords[0]===target)
-    return true;
-
-    else
-    return same_here(target, _.rest(keywords));
+    }
   }
 }
 
 
-//aryの中に指定したkeywordsがあればそれだけ消去
-//ex. var trim = ary_trimer("a","b"); trim(["a","b","c"]); => c
-
+//aryの中にpred関数でkeywordと照合した時にtrueと変えるやつがいたらtypeの関数を実行する
 function ary_trimer (/*keywords*/){
   var keywords = _.toArray(arguments);
-  return function(ary) {
-    return _.reject(ary,function(element){
-      return same_here(element, keywords);
-    });
+  return function (type){
+    return function(pred){
+      return function(ary) {
+        if(!_.isArray(ary)) fail("arguments must be Array");
+        return _[type].call(null,ary,function(element){
+          return pred.apply(null,[element, keywords]);
+        });
+      }
+    }
   }
 }
 
@@ -71,36 +74,52 @@ function ary_trimer (/*keywords*/){
 
 // --------------- 以下具体的に使ってく関数の名前を書いていく奴ら
 
-var air_trimmer =  ary_trimer("");
-var space_trimmer = ary_trimer(" ");
+//func:same_here(target,keywords)  keywords(ary)の中にtargetと同じものがあればtrue、なければfalse
+var same_here = whatever_here(function (a,b) { return a===b ? true : false });
 
-var nodata_trimmer = _.compose(air_trimmer, space_trimmer);
+//func;included_here(target, keywords)  keywords(ary)の中にtargetが含まれるヨウ素があればtrue,以外false
+var included_here = whatever_here(function (a,b) { return (a.indexOf(b)!==-1) ? true : false});
 
-//---------------- 引数用関数
+//以下二つとも、nodata_rejecterに含まれる
+var air_rejecter =  ary_trimer("")("reject")(same_here);
+var space_rejecter = ary_trimer("  ")("reject")(same_here);
 
+//func:nodata_rejecter(ary) aryの中の""と" "を消去する
+var nodata_rejecter = _.compose(air_rejecter, space_rejecter);
 
-function logue (data) {
+//func:file_finder(ary) aryの中にある"link"と"script"タグを抜き出す
+var file_finder = ary_trimer("<link","<script")("filter")(included_here);
 
-  var html_ary = nodata_trimmer(data.responseText.split("\n"));
-  console.log(html_ary);
+//func:split_marge(str,exp) split関数の消去しない版。
+function split_marge (str,exp) {
+  var result = str.split(new RegExp(exp));
+  var res_length = result.length
+  for (var i = 0; i < res_length; i++) {
+    result[i] += exp;
+  }
+  return result;
+
 }
 
 
+//---------------- 引数用関数
+
+function html_trim (data) {
+  var html_ary = nodata_rejecter(split_marge(data.responseText, ">"));
+  console.log(html_ary);
+}
+
+function file_find (data){
+  var files = file_finder(split_marge(data.responseText, ">"));
+  console.log(files);
+}
 
 // ****************以下実際のコード
-
-
 var global_url = always("http://www.sfc.keio.ac.jp/");
 
-var get_html = ajax_getter("html")(logue)(global_url());
-var get_css  = ajax_getter("text")(logue)(global_url());
+var get_html = ajax_getter("html")(html_trim)(global_url());
+var get_css  = ajax_getter("text")(file_find)(global_url());
 
 
 $("#button").on("click", get_html);
-
-
-
-
-
-
-$("#getCssButton").on("click", bind_css);
+$("#getCssButton").on("click", get_css);
