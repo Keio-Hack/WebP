@@ -36,7 +36,7 @@
           dest: './js/api.js',
         },
           client: {
-            src: ['./js/client/bind.js'],
+            src: ['./js/client/preview.js', './js/client/bind.js'],
             dest: './js/client.js',
           },
           application: {
