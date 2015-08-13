@@ -4,6 +4,7 @@
       pkg: grunt.file.readJSON('package.json'),
 
       jshint: {
+
         files: ["js/app.js"],
         options: {
           jshintrc: ".jshintrc",
@@ -23,17 +24,25 @@
       },
 
       watch: {
-        javascript: {
-          files: ['js/*.js', "!js/app.js"],
+        javascript_api: {
+          files: ['js/client/*.js', "js/api/*.js"],
           tasks: ['concat', "jshint"],
         }
       },
 
       concat: {
-        dist: {
-          src: ['./js/higher.js','./js/api.js', './js/bind.js' ],
-          dest: './js/app.js',
-        }
+          api: {
+          src: ['./js/api/higher.js','./js/api/get_source.js'],
+          dest: './js/api.js',
+        },
+          client: {
+            src: ['./js/client/bind.js'],
+            dest: './js/client.js',
+          },
+          application: {
+            src:['./js/api.js','./js/client.js'],
+            dest: './js/app.js',
+          },
       }
 
       //setting tasks

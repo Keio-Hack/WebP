@@ -1,4 +1,82 @@
 
+"use strict";
+
+//名前空間汚染対策
+var api_global = {};
+
+
+// -------------- これより下、関数型プログラムであったほうが楽な関数s なんで、無視しておｋ
+
+// valの存在確認プレディゲート と valがtrueを返すリテラルかを確認するプレディゲート
+function existy (val) { return val != null}　
+function truthy (val) { return (val !== false) && existy(val)} //valがtrueなやつかどうか確認プレディゲート
+function fail   (msg) { throw new Error(msg)} //エラーを吐く
+
+function always(VALUE) { //valueを常に返すクロージャ
+  return function() {
+    return VALUE;
+  };
+}
+
+function doWhen (cond, func) { //ifをカプセル化したやつ
+  if (truthy(cond))
+  return func();
+
+  else
+  return undefined;
+}
+
+
+
+// -------------- これより下、高階関数。関数を作る関数でし。 / 再帰関数 自分を呼び出す関数
+
+//$.getの引数指定のカリー化関数,
+//順番はtype,callback,url
+function ajax_getter (TYPE){
+  return function (FUN){
+    return function (URL) {
+      return function () {
+        $.get(URL,FUN,TYPE);
+      };
+    };
+  };
+}
+
+
+//指定したtargetとkeywords(ary)をpred(pred_function)を元にtrue,falseを返すpredicate関数
+function whatever_here(pred){
+  return function closure (target, keywords){
+    if (_.isEmpty(keywords)){
+      return false;
+    }
+    else{
+      var searcher = keywords[0];
+      if (pred(target,searcher))
+      return true
+      else
+      return closure(target, _.rest(keywords));
+
+    }
+  }
+}
+
+
+//aryの中にpred関数でkeywordsと照合した時にtrueと変えるやつがいたらtypeの関数を実行する
+function ary_trimer (/*keywords*/){
+  var keywords = _.toArray(arguments);
+  return function (type){
+    return function(pred){
+      return function(ary) {
+        if(!_.isArray(ary)) fail("arguments must be Array");
+        return _[type].call(null,ary,function(element){
+          return pred.apply(null,[element, keywords]);
+        });
+      }
+    }
+  }
+}
+
+
 // --------------- 以下具体的に使ってく関数の名前を書いていく奴ら
 
 //func:same_here(target,keywords)  keywords(ary)の中にtargetと同じものがあればtrue、なければfalse
@@ -6,6 +84,7 @@ var same_here = whatever_here(function (a,b) { return a===b ? true : false });
 
 //func;included_here(target, keywords)  keywords(ary)の中にtargetが含まれるヨウ素があればtrue,以外false
 var included_here = whatever_here(function (a,b) { return (a.indexOf(b)!==-1) ? true : false});
+
 
 //以下二つとも、nodata_rejecterに含まれる
 var air_rejecter =  ary_trimer("")("reject")(same_here);
@@ -49,6 +128,7 @@ function html_trim (data) {
   api_global.html = html_ary;
 }
 
+
 function file_find (data){
   var files = file_finder(split_marge(data.responseText, ">"));
 
@@ -56,12 +136,13 @@ function file_find (data){
     var url_attr = url_link_finder(h.split(" ")).join("");
     return multi_replace(url_attr,"",/href=/gi,/"/gi);
   });
+  var absolute_url = _.map(url_link, function(h) {if(!included_here(h,["http"])) return [api_global.url(), h].join("")});
 
-  api_global.file_link = url_link;
+  api_global.file_link = absolute_url;
 }
 
 // ****************以下実際のコード
-var global_url = always("http://www.sfc.keio.ac.jp/");
+api_global.url = always("https://life-is-tech.com/");
 
-var get_html = ajax_getter("html")(html_trim)(global_url());
-var get_css  = ajax_getter("text")(file_find)(global_url());
+var get_html = ajax_getter("html")(html_trim)(api_global.url());
+var get_css  = ajax_getter("text")(file_find)(api_global.url());
