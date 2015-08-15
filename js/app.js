@@ -180,7 +180,7 @@ function set_iframe(){
 	iframe_body.outerHTML = body_str;
 	var iframe_images = iframe.document.images;
 	_.toArray(iframe_images).forEach(function(value){
-		value.src = "../../images/testimage.jpg";
+		value.src = "../../images/NO_IMG.jpg";
 	});
 }
 
